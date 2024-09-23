@@ -1,106 +1,111 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
-      <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        />
-
-        <q-toolbar-title>
-          Quasar App
-        </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
-      </q-toolbar>
-    </q-header>
-
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
+  <div class="q-pa-md">
+    <q-layout
+      view="hHh Lpr lff"
+      style="height: 300px"
+      class="shadow-2 rounded-borders"
     >
-      <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
+      <q-header elevated :class="$q.dark.isActive ? 'bg-black' : 'bg-grey-2'">
+        <q-toolbar>
+          <q-btn
+            flat
+            @click="drawer = !drawer"
+            round
+            dense
+            icon="menu"
+            color="orange"
+          />
+          <q-toolbar-title
+            to="/trends"
+            clickable
+            v-ripple
+            style="
+              font-family: Impact, Haettenschweiler, 'Arial Narrow Bold',
+                sans-serif;
+              color: orange;
+            "
+            >Trends PH</q-toolbar-title
+          >
+        </q-toolbar>
+      </q-header>
 
-        <EssentialLink
-          v-for="link in linksList"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
-    </q-drawer>
+      <q-drawer
+        v-model="drawer"
+        show-if-above
+        :mini="miniState"
+        @mouseenter="miniState = false"
+        @mouseleave="miniState = true"
+        mini-to-overlay
+        :width="200"
+        :breakpoint="500"
+        bordered
+        :class="$q.dark.isActive ? 'bg-orange-6' : 'bg-orange-6'"
+      >
+        <q-scroll-area class="fit" :horizontal-thumb-style="{ opacity: 0 }">
+          <q-list padding>
+            <q-item to="/trends" clickable v-ripple>
+              <q-item-section avatar>
+                <q-icon name="diversity_3" />
+              </q-item-section>
 
-    <q-page-container>
-      <router-view />
-    </q-page-container>
-  </q-layout>
+              <q-item-section> Trends </q-item-section>
+            </q-item>
+
+            <q-separator />
+
+            <q-item to="/sports" clickable v-ripple>
+              <q-item-section avatar>
+                <q-icon name="sports_basketball" />
+              </q-item-section>
+
+              <q-item-section> Sports </q-item-section>
+            </q-item>
+
+            <q-separator />
+
+            <q-item to="/gaming" clickable v-ripple>
+              <q-item-section avatar>
+                <q-icon name="sports_esports" />
+              </q-item-section>
+
+              <q-item-section> Gaming </q-item-section>
+            </q-item>
+
+            <q-separator />
+
+            <q-item to="/news" clickable v-ripple>
+              <q-item-section avatar>
+                <q-icon name="newspaper" />
+              </q-item-section>
+
+              <q-item-section> News </q-item-section>
+            </q-item>
+          </q-list>
+        </q-scroll-area>
+      </q-drawer>
+
+      <q-page-container>
+        <q-page padding>
+          <router-view />
+
+          <q-page-scroller position="bottom">
+            <q-btn fab icon="keyboard_arrow_up" color="orange" />
+          </q-page-scroller>
+        </q-page>
+      </q-page-container>
+    </q-layout>
+  </div>
 </template>
 
-<script setup>
-import { ref } from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
+<script>
+import { ref } from "vue";
 
-defineOptions({
-  name: 'MainLayout'
-})
-
-const linksList = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
+export default {
+  setup() {
+    return {
+      drawer: ref(false),
+      miniState: ref(true),
+    };
   },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-]
-
-const leftDrawerOpen = ref(false)
-
-function toggleLeftDrawer () {
-  leftDrawerOpen.value = !leftDrawerOpen.value
-}
+};
 </script>
